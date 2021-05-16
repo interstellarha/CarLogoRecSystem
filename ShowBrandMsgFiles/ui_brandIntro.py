@@ -48,11 +48,11 @@ class Ui_BrandIntro(object):
         
 
         self.enameTitle = QtWidgets.QLabel(Form)
-        self.enameTitle.setGeometry(QtCore.QRect(669, 120, 72, 18))
+        self.enameTitle.setGeometry(QtCore.QRect(630, 120, 72, 18))
         self.enameTitle.setObjectName("enameTitle")
 
         self.cnameTitle = QtWidgets.QLabel(Form)
-        self.cnameTitle.setGeometry(QtCore.QRect(669, 147, 72, 18))
+        self.cnameTitle.setGeometry(QtCore.QRect(630, 147, 72, 18))
         self.cnameTitle.setObjectName("cnameTitle")
 
         self.introText = QtWidgets.QTextBrowser(Form)
@@ -68,11 +68,11 @@ class Ui_BrandIntro(object):
         self.label.setObjectName("label")
 
         self.ename = QtWidgets.QLabel(Form)
-        self.ename.setGeometry(QtCore.QRect(750, 120, 81, 18))
+        self.ename.setGeometry(QtCore.QRect(710, 120, 81, 18))
         self.ename.setObjectName("ename")
 
         self.cname = QtWidgets.QLabel(Form)
-        self.cname.setGeometry(QtCore.QRect(750, 147, 81, 18))
+        self.cname.setGeometry(QtCore.QRect(710, 147, 81, 18))
         self.cname.setObjectName("cname")
 
         self.retranslateUi(Form)
@@ -84,12 +84,17 @@ class Ui_BrandIntro(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.enameTitle.setText(_translate("Form", "英文名："))
+        self.enameTitle.adjustSize()
         self.cnameTitle.setText(_translate("Form", "中文名："))
         self.introTitle.setText(_translate("Form", "品牌介绍"))
 
         #print(self.brandInfo)
         self.ename.setText(_translate("Form", self.brandInfo[0])) #中文名
+        self.ename.resize(len(self.brandInfo[0])*10,18)
+
         self.cname.setText(_translate("Form", self.brandInfo[1])) #英文名
+        #self.cname.resize(len(self.brandInfo[1])*20,18)
+
         self.introText.setText(_translate("Form", self.brandInfo[3])) #介绍
 
         self.label.setText(_translate("Form", '更详细内容请<a href="%s">点击</a>'%self.brandInfo[4]))
@@ -103,14 +108,18 @@ class Ui_BrandIntro(object):
         self.carLogo.setPixmap(logo)
 
 
-
-        
-
          
 if __name__=='__main__':
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QMainWindow()
-    test = Ui_BrandIntro("Audi") #传入识别结果
-    test.setupUi(MainWindow)
+
+    #showBrandIntro = Ui_BrandIntro(result) #传入识别结果，一下均为测试
+
+    #可能是字符编码问题，下行可以，下下行不行
+    #showBrandIntro = Ui_BrandIntro("Land Rover") #不行
+    #showBrandIntro = Ui_BrandIntro("Land Rover") #可以
+    showBrandIntro = Ui_BrandIntro("Audi") #可以
+
+    showBrandIntro.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
