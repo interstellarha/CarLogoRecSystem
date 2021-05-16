@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# author：77SWF
 
 # Form implementation generated from reading ui file 'brandIntro.ui'
 #
@@ -9,43 +10,54 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog,QMessageBox,QAction
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox, QAction
 import sys
 import sqlite3
 import requests
+import CarRecommendSpider  # 爬取当前品牌推荐车辆信息
+from Ui_LeftSingleBlock import Ui_LeftSingleBlock #组合部件：左侧每辆推荐的车的模板
 
 
 class Ui_BrandIntro(object):
-    def __init__(self,brandEname): #传入品牌英文名（识别结果）
+    # 信息初始化(收集信息)，传入品牌英文名（识别结果）
+    def __init__(self, brandEname):  
+        # 右侧：品牌信息
+        #######################################################
         print("连接数据库...")
-        self.conn = sqlite3.connect("database.db") #连接数据库
+        self.conn = sqlite3.connect("database.db")  # 连接数据库
         print("连接成功...")
+
         self.cursor = self.conn.cursor()
-        
-        #从数据库查询检测到的品牌
         sql = '''
             SELECT * from CAR_BRAND where cname = \"{ename}\"
-        '''.format(ename = brandEname)
+        '''.format(ename=brandEname)  # 从数据库查询检测到的品牌
+
         print("查询品牌信息...")
         self.cursor.execute(sql)
-        self.brandInfo = self.cursor.fetchone() #一行
-        print("查询成功...") #得到tuple
+        self.brandInfo = self.cursor.fetchone()  # 一行
+        print("查询成功...")  # 得到tuple
+
+        # 左侧：推荐信息
+        #######################################################
+        self.reCommendList = CarRecommendSpider.main(brandEname) #12辆车
+        #print(self.reCommendList) #测试
 
 
+    #参数Form(父窗口)的控件初始化
     def setupUi(self, Form): 
         Form.setObjectName("Form")
-        Form.resize(981, 646)
-
+        Form.resize(981, 646) #原父窗口大小调整
 
         self.carLogo = QtWidgets.QLabel(Form)
         self.carLogo.setGeometry(QtCore.QRect(512, 93, 111, 101))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.carLogo.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.carLogo.sizePolicy().hasHeightForWidth())
         self.carLogo.setSizePolicy(sizePolicy)
         self.carLogo.setObjectName("carLogo")
-        
 
         self.enameTitle = QtWidgets.QLabel(Form)
         self.enameTitle.setGeometry(QtCore.QRect(630, 120, 72, 18))
@@ -75,10 +87,22 @@ class Ui_BrandIntro(object):
         self.cname.setGeometry(QtCore.QRect(710, 147, 81, 18))
         self.cname.setObjectName("cname")
 
+        self.verticalLayoutWidget = QtWidgets.QWidget(Form)  #左侧一整列
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 450, 600))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        self.vboxCars = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.vboxCars.setContentsMargins(0, 0, 0, 0)
+        self.vboxCars.setObjectName("verticalLayout")
+    
+        self.addRecommendCars()
+
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
-
+    def addRecommendCars(self): 
+        for item in self.reCommendList: #循环每个推荐车辆
+            self.car = Ui_LeftSingleBlock(item)
+            self.vboxCars.addWidget(self.car)
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
@@ -88,17 +112,18 @@ class Ui_BrandIntro(object):
         self.cnameTitle.setText(_translate("Form", "中文名："))
         self.introTitle.setText(_translate("Form", "品牌介绍"))
 
-        #print(self.brandInfo)
-        self.ename.setText(_translate("Form", self.brandInfo[0])) #中文名
-        self.ename.resize(len(self.brandInfo[0])*10,18)
+        # print(self.brandInfo)
+        self.ename.setText(_translate("Form", self.brandInfo[0]))  # 中文名
+        self.ename.resize(len(self.brandInfo[0])*10, 18)
 
-        self.cname.setText(_translate("Form", self.brandInfo[1])) #英文名
-        #self.cname.resize(len(self.brandInfo[1])*20,18)
+        self.cname.setText(_translate("Form", self.brandInfo[1]))  # 英文名
+        # self.cname.resize(len(self.brandInfo[1])*20,18)
 
-        self.introText.setText(_translate("Form", self.brandInfo[3])) #介绍
+        self.introText.setText(_translate("Form", self.brandInfo[3]))  # 介绍
 
-        self.label.setText(_translate("Form", '更详细内容请<a href="%s">点击</a>'%self.brandInfo[4]))
-        self.label.setOpenExternalLinks(True)  # 使成为超链接，外部浏览器打开
+        self.label.setText(_translate(
+            "Form", '更详细内容请<a href="%s">点击</a>' % self.brandInfo[4]))
+        self.label.setOpenExternalLinks(True)  # 使成为超链接，外部浏览器打开，后期可以改成内部控件
 
         url = self.brandInfo[2]
         req = requests.get(url)
@@ -108,17 +133,16 @@ class Ui_BrandIntro(object):
         self.carLogo.setPixmap(logo)
 
 
-         
-if __name__=='__main__':
+if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QMainWindow()
 
-    #showBrandIntro = Ui_BrandIntro(result) #传入识别结果，一下均为测试
+    # showBrandIntro = Ui_BrandIntro(result) #传入识别结果，一下均为测试
 
-    #可能是字符编码问题，下行可以，下下行不行
-    #showBrandIntro = Ui_BrandIntro("Land Rover") #不行
-    #showBrandIntro = Ui_BrandIntro("Land Rover") #可以
-    showBrandIntro = Ui_BrandIntro("Audi") #可以
+    # 可能是字符编码问题，下行可以，下下行不行
+    # showBrandIntro = Ui_BrandIntro("Land Rover") #可以
+    # showBrandIntro = Ui_BrandIntro("Land Rover") #不行
+    showBrandIntro = Ui_BrandIntro("Audi")  # 可以
 
     showBrandIntro.setupUi(MainWindow)
     MainWindow.show()
