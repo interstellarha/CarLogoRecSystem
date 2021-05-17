@@ -21,6 +21,7 @@ def askURL(url):
     findScore = re.compile(r'<span class="score-number">(.*?)</span>', re.S)
     findType = re.compile(r'<span class="info-gray">(.*?)</span>', re.S)
     findEngine = re.compile(r'<span title=""><a href="(.*?)">(.*?)</a>', re.S)
+    findLink = re.compile(r'<a class="font-bold" href="(.*?)" target="_blank">',re.S)
 
     list = [[], [], [], [], [], [], [], [], [], [], [], []]  # 存储品牌车辆全部信息
     data_ImgSrc = []
@@ -43,14 +44,19 @@ def askURL(url):
                 Score0 = re.findall(findScore, item)[0]
             else:
                 Score0 = ' '
-            Score = "用户评分：" + Score0
+            #Score = "用户评分：" + Score0
+            Score = Score0
 
             Type0 = re.findall(findType, item)[0]
-            Type = "级别：" + Type0
+            #Type = "级别：" + Type0
+            Type = Type0
             if (re.findall(findEngine, item)):
                 Engine = re.findall(findEngine, item)[0][1]
             else:
                 Engine = ' '
+
+            Link = re.findall(findLink,item)[0]
+            #print(item)
             # Title = re.findall(findTitle, item)[0]
             # Rating = re.findall(findRating, item)[0]
             # People = re.findall(findPeople, item)[0]
@@ -61,6 +67,7 @@ def askURL(url):
             list[number].append(Score)
             list[number].append(Type)
             list[number].append(Engine)
+            list[number].append(Link)
 
             data_ImgSrc.append(ImgSrc)
             data_Name.append(Name)
@@ -109,7 +116,8 @@ def main(carEname):
         if brand_dic[i] == carEname:
             url = baseurl + str(i) + '.html'
             listtest = askURL(url)
-            print(listtest)
+            #print(listtest)
+            return listtest
         # dict.update({brand_dic[i]: listtest})
         # #测试
         # print(brand_dic[i]+':'+str(listtest))

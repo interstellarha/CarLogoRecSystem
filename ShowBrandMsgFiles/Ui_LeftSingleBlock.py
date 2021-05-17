@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# author：77SWF
 
 # Form implementation generated from reading ui file 'LeftSingleBlock.ui'
 #
@@ -192,7 +193,12 @@ class Ui_LeftSingleBlock(QtWidgets.QWidget):
 
         #问题：print(type(self.oneCarList[2])) #str
         if(self.oneCarList[2]):
-            score = "2.1"
+            score = self.oneCarList[2]
+            if(score.isspace()): #去掉评分中的空格
+                score = score.replace(' ','')
+            #print(score.isspace())
+            if(score == ""):
+                score = 0
             self.scoreBar.setValue(float(score) * 100 / 5) #评分:0~100
         else:
             self.scoreBar.setValue(0)
