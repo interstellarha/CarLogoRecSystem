@@ -37,13 +37,13 @@ class Ui_LeftSingleBlock(QtWidgets.QWidget):
         # .setGeometry(QtCore.QRect(120, 200, 611, 141))
         # .setObjectName("widget")
 
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
         self.setSizePolicy(sizePolicy)
-        self.setMinimumSize(QtCore.QSize(500, 130))
-        self.setMaximumSize(QtCore.QSize(500, 130))
+        # self.setMinimumSize(QtCore.QSize(500, 130))
+        # self.setMaximumSize(QtCore.QSize(500, 130))
 
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -53,7 +53,7 @@ class Ui_LeftSingleBlock(QtWidgets.QWidget):
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
 
         self.carImg = QtWidgets.QLabel()
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.carImg.sizePolicy().hasHeightForWidth())
@@ -99,7 +99,7 @@ class Ui_LeftSingleBlock(QtWidgets.QWidget):
         spacerItem1 = QtWidgets.QSpacerItem(20, 5, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
         self.verticalLayout_3.addItem(spacerItem1)
 
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         self.scoreBar = QtWidgets.QProgressBar()
@@ -112,6 +112,8 @@ class Ui_LeftSingleBlock(QtWidgets.QWidget):
         self.scoreBar.setOrientation(QtCore.Qt.Horizontal)
         self.scoreBar.setInvertedAppearance(False)
         self.scoreBar.setObjectName("scoreBar")
+        self.scoreBar.setMinimumSize(QtCore.QSize(100, 20))
+        self.scoreBar.setMaximumSize(QtCore.QSize(100, 20))
 
         self.verticalLayout_3.addWidget(self.scoreBar)
         spacerItem2 = QtWidgets.QSpacerItem(20, 5, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
@@ -178,8 +180,9 @@ class Ui_LeftSingleBlock(QtWidgets.QWidget):
         self.engineLabel.setText("发动机：")
         self.engine.setText("TextLabel")
 
-        self.carName.setText(self.oneCarList[0]) #车名
-        
+        self.carName.setText('<a href="{}">{}</a>' .format(self.oneCarList[-1],self.oneCarList[0])) #车名
+        self.carName.setOpenExternalLinks(True)  # 使成为超链接，外部浏览器打开
+
         url = self.oneCarList[1] #车图片
         req = requests.get(url)
         carPhoto = QtGui.QPixmap()
@@ -187,7 +190,7 @@ class Ui_LeftSingleBlock(QtWidgets.QWidget):
         carPhoto = carPhoto.scaled(QtCore.QSize(160,120)) #4:3
         self.carImg.setPixmap(carPhoto)
 
-        #print(type(self.oneCarList[2])) #str
+        #问题：print(type(self.oneCarList[2])) #str
         if(self.oneCarList[2]):
             score = "2.1"
             self.scoreBar.setValue(float(score) * 100 / 5) #评分:0~100

@@ -49,7 +49,7 @@ class Ui_BrandIntro(object):
         Form.resize(981, 646) #原父窗口大小调整
 
         self.carLogo = QtWidgets.QLabel(Form)
-        self.carLogo.setGeometry(QtCore.QRect(512, 93, 111, 101))
+        self.carLogo.setGeometry(QtCore.QRect(612, 93, 111, 101))
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -60,35 +60,36 @@ class Ui_BrandIntro(object):
         self.carLogo.setObjectName("carLogo")
 
         self.enameTitle = QtWidgets.QLabel(Form)
-        self.enameTitle.setGeometry(QtCore.QRect(630, 120, 72, 18))
+        self.enameTitle.setGeometry(QtCore.QRect(730, 120, 72, 18))
         self.enameTitle.setObjectName("enameTitle")
 
         self.cnameTitle = QtWidgets.QLabel(Form)
-        self.cnameTitle.setGeometry(QtCore.QRect(630, 147, 72, 18))
+        self.cnameTitle.setGeometry(QtCore.QRect(730, 147, 72, 18))
         self.cnameTitle.setObjectName("cnameTitle")
 
         self.introText = QtWidgets.QTextBrowser(Form)
-        self.introText.setGeometry(QtCore.QRect(511, 248, 331, 300))
+        self.introText.setGeometry(QtCore.QRect(611, 248, 331, 300))
         self.introText.setObjectName("introText")
 
         self.introTitle = QtWidgets.QLabel(Form)
-        self.introTitle.setGeometry(QtCore.QRect(510, 220, 72, 18))
+        self.introTitle.setGeometry(QtCore.QRect(610, 220, 72, 18))
         self.introTitle.setObjectName("introTitle")
 
         self.label = QtWidgets.QLabel(Form)
-        self.label.setGeometry(QtCore.QRect(700, 550, 144, 18))
+        self.label.setGeometry(QtCore.QRect(800, 550, 144, 18))
         self.label.setObjectName("label")
 
         self.ename = QtWidgets.QLabel(Form)
-        self.ename.setGeometry(QtCore.QRect(710, 120, 81, 18))
+        self.ename.setGeometry(QtCore.QRect(810, 120, 81, 18))
         self.ename.setObjectName("ename")
 
         self.cname = QtWidgets.QLabel(Form)
-        self.cname.setGeometry(QtCore.QRect(710, 147, 81, 18))
+        self.cname.setGeometry(QtCore.QRect(810, 147, 81, 18))
         self.cname.setObjectName("cname")
 
         self.verticalLayoutWidget = QtWidgets.QWidget(Form)  #左侧一整列
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 450, 600))
+        carNum = len(self.reCommendList) #推荐车的数量
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 550, 115*carNum)) #按数量决定下滑长度
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.vboxCars = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.vboxCars.setContentsMargins(0, 0, 0, 0)
@@ -96,7 +97,7 @@ class Ui_BrandIntro(object):
 
         self.scroll = QScrollArea(Form)
         self.scroll.setWidget(self.verticalLayoutWidget)
-        self.scroll.setGeometry(QtCore.QRect(10, 10, 500, 600))
+        self.scroll.setGeometry(QtCore.QRect(10, 10, 580, 600))
     
         self.addRecommendCars()
 
@@ -107,6 +108,7 @@ class Ui_BrandIntro(object):
         for item in self.reCommendList: #循环每个推荐车辆
             self.car = Ui_LeftSingleBlock(item)
             self.vboxCars.addWidget(self.car)
+            self.vboxCars.addStretch(1)
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
