@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from Recognizing import Ui_Recognizing
+from Recognizing2 import Ui_Recognizing2
 from PyQt5 import QtCore, QtGui, QtWidgets
 import numpy as np
 #from predict import result
@@ -24,14 +25,15 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras.utils import np_utils
 from keras.regularizers import l2
 from keras.initializers import RandomNormal, VarianceScaling
-
 # Importing scikit-learn tools
 from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 # Setting up the image pool
+import sqlite3 #执行sqlite3数据库操作
 
 OpenFilePath = " "
+result = " "
 class SelectWin(QWidget, Ui_Recognizing):
     def __init__(self):
         super(SelectWin,self).__init__()
@@ -50,9 +52,81 @@ class SelectWin(QWidget, Ui_Recognizing):
         OpenFilePath = OpenFileInfo.filePath()
         print(OpenFilePath)
 
-    #def recognizing(self):
-     #   print(result)
+    def Recognizing(self):
+        new_image_path = OpenFilePath
+        # new_imgs = os.listdir(new_image_path)
+        # new_n_samples = np.size(new_imgs)
+        im = Image.open(new_image_path).convert("RGB")
+        new_im = np.array(im.resize((50, 50))).flatten()
+        m = int(model.predict_classes(ImageConvert(1, new_im), verbose=0))
+        global result
+        result = cars[m]
+        print(result)
+        # 关闭当前窗口打开新窗口
+        self.hide()
+        self.newWindow = ResultWin()
+        self.newWindow.show()
+        return result
 
+class ResultWin(QWidget,Ui_Recognizing2):
+    def __init__(self):
+        super(ResultWin,self).__init__()
+        self.setupUi(self)
+        global OpenFilePath
+        img = QPixmap(OpenFilePath).scaled(self.pic.width(),self.pic.height())
+        self.conn = sqlite3.connect("database2.db")
+        print("connect database2 successfully")
+        self.cur = self.conn.cursor()
+        self.pic.setPixmap(img)
+        self.name.setText(result)
+        self.iLike.clicked.connect(self.ILike)
+        self.briefIntro.setText(str(self.ShowInfo()))
+        self.back.clicked.connect(self.BackToSelect)
+
+    def ShowInfo(self):
+        # 数据库操作
+        self.cur.execute("SELECT * FROM CAR_BRAND WHERE cname = \"{carname}\"".format(carname=result))
+        info = self.cur.fetchone()
+        print(info[3])
+        return info[3]
+
+    def ILike(self):
+        #创建品牌——用户表
+        sql = '''
+             CREATE TABLE IF NOT EXISTS ILIKE
+             (
+             brand varchar,
+             userName varchar
+             )
+        '''
+        print("create successfully")
+        self.cur.execute(sql)
+        self.conn.commit()
+        #添加喜欢信息，并判断是否曾经存在过
+        sql2 = '''
+              INSERT INTO ILIKE 
+              (brand,userName) values(\"{brand}\",\"{userName}\")
+        '''.format(brand = result,userName = "noname")
+        sql3 = '''
+             SELECT * FROM ILIKE WHERE userName = \"{userName}\" 
+        '''.format(userName = "noname")
+        self.cur.execute(sql3)
+        info = self.cur.fetchone()
+        if info != None and str(info[0])==result:
+            print("Already exists")
+            self.likeShow.setText("Already liked!")
+            return
+        else:
+            self.likeShow.setText("Like it!")
+            self.cur.execute(sql2)
+            self.conn.commit()
+            print("successfully insert")
+            return
+
+    def BackToSelect(self):
+        self.hide()
+        m.show()
+        return
 
 cars = ['Alfa Romeo', 'Audi', 'BMW', 'Chevrolet', 'Citroen', 'Dacia', 'Daewoo', 'Dodge',
         'Ferrari', 'Fiat', 'Ford', 'Honda', 'Hyundai', 'Jaguar', 'Jeep', 'Kia', 'Lada',
@@ -120,18 +194,6 @@ def ImageConvert(n, i):
     im_ex = np.multiply(im_ex, 2.0)
     return im_ex
 
-def Recognizing():
-    new_image_path = OpenFilePath
-    #new_imgs = os.listdir(new_image_path)
-    #new_n_samples = np.size(new_imgs)
-
-    im = Image.open(new_image_path).convert("RGB") #+ new_imgs[0]).convert("RGB"
-    new_im = np.array(im.resize((50, 50))).flatten()
-    m = int(model.predict_classes(ImageConvert(1, new_im), verbose=0))
-    result = cars[m]
-    print(result)
-    return result
-
 
 if __name__ == '__main__':
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
@@ -139,7 +201,7 @@ if __name__ == '__main__':
     m = SelectWin()
     m.select.clicked.connect(m.openImage)
     #print(OpenFilePath)
-    m.recognize.clicked.connect(Recognizing)
+    m.recognize.clicked.connect(m.Recognizing)
     m.show()
     '''
     MainWindow = QMainWindow()

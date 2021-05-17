@@ -8,7 +8,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget
 
 from index_ui import Ui_index
-
+from PyQt5.QtGui import *
 
 class FormIndex(QWidget, Ui_index):
     def __init__(self, parent=None):
@@ -17,6 +17,7 @@ class FormIndex(QWidget, Ui_index):
 
 
 if __name__ == '__main__':
+    #QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     app = QApplication(sys.argv)
     dialog = FormIndex()
     dialog.show()
