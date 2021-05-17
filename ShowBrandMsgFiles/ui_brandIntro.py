@@ -10,7 +10,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox, QAction
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox, QAction, QScrollArea
 import sys
 import sqlite3
 import requests
@@ -93,6 +93,10 @@ class Ui_BrandIntro(object):
         self.vboxCars = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.vboxCars.setContentsMargins(0, 0, 0, 0)
         self.vboxCars.setObjectName("verticalLayout")
+
+        self.scroll = QScrollArea(Form)
+        self.scroll.setWidget(self.verticalLayoutWidget)
+        self.scroll.setGeometry(QtCore.QRect(10, 10, 500, 600))
     
         self.addRecommendCars()
 
