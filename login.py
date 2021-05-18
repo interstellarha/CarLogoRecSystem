@@ -34,15 +34,15 @@ from keras.models import Sequential
 from keras.layers import Activation, Dense, Dropout, Flatten
 from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.constraints import maxnorm
-from keras.optimizers import adam, RMSprop, SGD
+# from keras.optimizers import adam, RMSprop, SGD
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras.utils import np_utils
 from keras.regularizers import l2
 from keras.initializers import RandomNormal, VarianceScaling
 # Importing scikit-learn tools
-from sklearn.utils import shuffle
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix
+# from sklearn.utils import shuffle
+# from sklearn.model_selection import train_test_split
+# from sklearn.metrics import confusion_matrix
 # Setting up the image pool
 import sqlite3 #执行sqlite3数据库操作
 from Ui_LeftSingleBlock import Ui_LeftSingleBlock #组合部件：左侧每辆推荐的车的模板
@@ -50,6 +50,7 @@ import CarRecommendSpider  # 爬取当前品牌推荐车辆信息
 import requests
 from index_ui import Ui_index
 import globalvar as gl
+from CarRecommendSpider import *
 
 gl._init()  # 初始化全局变量管理模块
 gl.set_value('username', "")  # 设置变量值 username
@@ -190,13 +191,25 @@ class ResultWin(QWidget,Ui_Recognizing2):
         self.back.clicked.connect(self.BackToSelect)
         # 左侧：推荐信息
         #######################################################
-        self.reCommendList = CarRecommendSpider.main(str(result))  # 12辆车
+        self.reCommendList = CarRecommendSpider.get_one_brand(str(result))  # 12辆车
         print(self.reCommendList)
         carNum = len(self.reCommendList)  # 推荐车的数量
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10,10,500,115*carNum))
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(10,40,400,115*carNum))
-        self.scrollAreaWidgetContents_2.setMinimumSize(QtCore.QSize(500, 115*carNum))
-        self.addRecommendCars()
+        if(len(self.reCommendList)==0):
+            print("no recommendation")
+            self.scrollArea_2.hide()
+            # self.label = QLabel("暂无推荐信息")
+            # self.label.setAlignment(Qt.AlignRight)
+            # self.label.setStyleSheet("color:rgb(20,20,20,255);font-size:16px;font-weight:bold:text")
+
+
+        else:
+            self.message.hide()
+            self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 500, 115 * carNum))
+            self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(10, 40, 400, 115 * carNum))
+            self.scrollAreaWidgetContents_2.setMinimumSize(QtCore.QSize(500, 115 * carNum))
+
+
+            self.addRecommendCars()
         self.ShowDataPic()
         self.getPersonalInfo()
 
