@@ -39,7 +39,7 @@ class Ui_BrandIntro(object):
 
         # 左侧：推荐信息
         #######################################################
-        self.reCommendList = CarRecommendSpider.main(brandEname) #12辆车
+        self.reCommendList = CarRecommendSpider.get_one_brand(brandEname) #12辆车
         #print(self.reCommendList) #测试
 
 

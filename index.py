@@ -5,28 +5,26 @@
 # @Project: HWprogram
 import sys
 
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget
+from PyQt5.QtWidgets import QApplication, QWidget
 
 from index_ui import Ui_index
-from PyQt5.QtGui import *
-from search import Ui_MainWindow
+
+from _infoPage import personalInfoPage
+
 
 class FormIndex(QWidget, Ui_index):
     def __init__(self, parent=None):
         super(FormIndex, self).__init__(parent)
         self.setupUi(self)
-        self.carLogo.clicked.connect(self.carLogoClicked)
+        self.home.clicked.connect(self.enterHomePage)
 
-    def carLogoClicked(self):
+    def enterHomePage(self):
         self.hide()
-        self.MainWindow = QMainWindow()
-        self.test = Ui_MainWindow()
-        self.test.setupUi(self.MainWindow)
-        self.MainWindow.show()
+        self.mywindow = personalInfoPage()
+        self.mywindow.show()
 
 
 if __name__ == '__main__':
-    #QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     app = QApplication(sys.argv)
     dialog = FormIndex()
     dialog.show()
