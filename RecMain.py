@@ -31,6 +31,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 # Setting up the image pool
 import sqlite3 #执行sqlite3数据库操作
+from Ui_LeftSingleBlock import Ui_LeftSingleBlock #组合部件：左侧每辆推荐的车的模板
+import CarRecommendSpider  # 爬取当前品牌推荐车辆信息
+import requests
 
 OpenFilePath = " "
 result = " "
@@ -72,7 +75,7 @@ class ResultWin(QWidget,Ui_Recognizing2):
     def __init__(self):
         super(ResultWin,self).__init__()
         self.setupUi(self)
-        global OpenFilePath
+        global OpenFilePath,result
         img = QPixmap(OpenFilePath).scaled(self.pic.width(),self.pic.height())
         self.conn = sqlite3.connect("database.db")
         print("connect database successfully")
@@ -82,6 +85,14 @@ class ResultWin(QWidget,Ui_Recognizing2):
         self.iLike.clicked.connect(self.ILike)
         self.briefIntro.setText(str(self.ShowInfo()))
         self.back.clicked.connect(self.BackToSelect)
+        # 左侧：推荐信息
+        #######################################################
+        self.reCommendList = CarRecommendSpider.main(str(result))  # 12辆车
+        print(self.reCommendList)
+        carNum = len(self.reCommendList)  # 推荐车的数量
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10,40,400,115*carNum))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(10,40,400,115*carNum))
+        self.addRecommendCars()
 
     def ShowInfo(self):
         # 数据库操作
@@ -126,6 +137,13 @@ class ResultWin(QWidget,Ui_Recognizing2):
     def BackToSelect(self):
         self.hide()
         m.show()
+        return
+
+    def addRecommendCars(self):
+        for item in self.reCommendList: #循环每个推荐车辆
+            self.car = Ui_LeftSingleBlock(item)
+            self.verticalLayout.addWidget(self.car)
+            self.verticalLayout.addStretch(1)
         return
 
 cars = ['Alfa Romeo', 'Audi', 'BMW', 'Chevrolet', 'Citroen', 'Dacia', 'Daewoo', 'Dodge',
