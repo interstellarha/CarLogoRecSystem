@@ -140,6 +140,18 @@ class SelectWin(QWidget, Ui_Recognizing):
         self.select.clicked.connect(self.openImage)
         self.recognize.clicked.connect(self.Recognizing)
         self.return_2.clicked.connect(self.ReturnToIndex)
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.ShowTime)#通过调用槽函数刷新时间
+        self.timer.start(1000)
+
+    def ShowTime(self):
+        #self.timer.start(1000) #1000ms刷新一次
+        time = QTime.currentTime()#获取当前时间
+        date = QDate.currentDate()
+        timedisplay = time.toString("hh:mm:ss") #格式化时间
+        datedisplay = date.toString("yyyy-MM-dd") #格式化日期
+        self.time.setText(timedisplay)
+        self.date.setText(datedisplay)
 
     def openImage(self):
         imgName,imgType = QFileDialog.getOpenFileName(self,"select","img","*.jpg;*.tif;*.png;;All Files(*)")
@@ -193,9 +205,9 @@ class ResultWin(QWidget,Ui_Recognizing2):
         self.reCommendList = CarRecommendSpider.main(str(result))  # 12辆车
         print(self.reCommendList)
         carNum = len(self.reCommendList)  # 推荐车的数量
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10,10,500,115*carNum))
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(10,40,400,115*carNum))
-        self.scrollAreaWidgetContents_2.setMinimumSize(QtCore.QSize(500, 115*carNum))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10,10,522,115*carNum))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(10,40,522,115*carNum))
+        self.scrollAreaWidgetContents_2.setMinimumSize(QtCore.QSize(522, 115*carNum))
         self.addRecommendCars()
         self.ShowDataPic()
         self.getPersonalInfo()
