@@ -92,7 +92,9 @@ class ResultWin(QWidget,Ui_Recognizing2):
         carNum = len(self.reCommendList)  # 推荐车的数量
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(10,40,400,115*carNum))
         self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(10,40,400,115*carNum))
+        self.scrollAreaWidgetContents_2.setMinimumSize(QtCore.QSize(0, 115*carNum))
         self.addRecommendCars()
+        self.ShowDataPic()
 
     def ShowInfo(self):
         # 数据库操作
@@ -145,6 +147,22 @@ class ResultWin(QWidget,Ui_Recognizing2):
             self.verticalLayout.addWidget(self.car)
             self.verticalLayout.addStretch(1)
         return
+
+    def ShowDataPic(self):
+        sql = '''
+                    SELECT * from CAR_BRAND where cname = \"{ename}\"
+                '''.format(ename=result)  # 从数据库查询检测到的品牌
+
+        print("查询品牌信息...")
+        self.cur.execute(sql)
+        self.brandInfo = self.cur.fetchone()  # 一行
+        print("查询成功...")  # 得到tuple
+        url = self.brandInfo[2]
+        req = requests.get(url)
+        logo = QtGui.QPixmap()
+        logo.loadFromData(req.content)
+        logo = logo.scaled(QtCore.QSize(self.origin.width(),self.origin.height()))
+        self.origin.setPixmap(logo)
 
 cars = ['Alfa Romeo', 'Audi', 'BMW', 'Chevrolet', 'Citroen', 'Dacia', 'Daewoo', 'Dodge',
         'Ferrari', 'Fiat', 'Ford', 'Honda', 'Hyundai', 'Jaguar', 'Jeep', 'Kia', 'Lada',

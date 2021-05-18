@@ -9,11 +9,17 @@ from PyQt5.QtWidgets import QApplication, QWidget
 
 from index_ui import Ui_index
 from PyQt5.QtGui import *
+from login import SelectWindow
 
 class FormIndex(QWidget, Ui_index):
     def __init__(self, parent=None):
         super(FormIndex, self).__init__(parent)
         self.setupUi(self)
+        self.logoRecognition.clicked.connect(self.EnterRecog)
+
+    def EnterRecog(self):
+        self.hide()
+        SelectWindow.show()
 
 
 if __name__ == '__main__':
