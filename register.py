@@ -37,6 +37,13 @@ def judge_account(account):
     return 0
 
 
+def convertToBinaryData(filename):
+    # Convert digital data to binary format
+    with open(filename, 'rb') as file:
+        blobData = file.read()
+    return blobData
+
+
 class FormSignUp(QWidget, Ui_regist):
     def __init__(self, parent=None):
         super(FormSignUp, self).__init__(parent)
@@ -162,20 +169,29 @@ class FormSignUp(QWidget, Ui_regist):
 
     def add_account(self):
         """注册成功后的操作"""
-        name = self.lineEdit_account.text()  # 将新注册的账号录入系统的账号数据库
-        password = self.lineEdit_password.text()
+        try:
+            name = self.lineEdit_account.text()  # 将新注册的账号录入系统的账号数据库
+            password = self.lineEdit_password.text()
+            photo = "./pyqtpic/portrait.jpg"
 
-        cn = sqlite3.connect("database.db")  # 连接系统账号数据库
-        cursor = cn.cursor()
-        c = cursor.execute('''select * from user''')
-        r = c.fetchall()
-        num = len(r) + 1
+            cn = sqlite3.connect("database.db")  # 连接系统账号数据库
+            cursor = cn.cursor()
+            c = cursor.execute('''select * from user''')
+            r = c.fetchall()
+            num = len(r) + 1
 
-        sql = '''insert into user(id,name,pwd) 
-                            values( '%s', '%s','%s')
-                         ''' % (num, name, password)
-        cn.execute(sql)
-        cn.commit()
+            empPhoto = convertToBinaryData(photo)
+
+            sql = """insert into user(id,name,pwd,portrait) 
+                                values( ?, ?, ?, ?)
+                             """
+            data_tuple = (num, name, password, empPhoto)
+            cursor.execute(sql, data_tuple)
+            cn.commit()
+            cursor.close()
+
+        except sqlite3.Error as error:
+            print("Failed to insert blob data into sqlite table", error)
 
         #with open("./pyqtpic/portrait.jpg", "rb") as f:
             #res = base64.b64encode(f.read())

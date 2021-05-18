@@ -31,6 +31,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 # Setting up the image pool
 import sqlite3 #执行sqlite3数据库操作
+from Ui_LeftSingleBlock import Ui_LeftSingleBlock #组合部件：左侧每辆推荐的车的模板
+import CarRecommendSpider  # 爬取当前品牌推荐车辆信息
+import requests
 
 OpenFilePath = " "
 result = " "
@@ -72,16 +75,26 @@ class ResultWin(QWidget,Ui_Recognizing2):
     def __init__(self):
         super(ResultWin,self).__init__()
         self.setupUi(self)
-        global OpenFilePath
+        global OpenFilePath,result
         img = QPixmap(OpenFilePath).scaled(self.pic.width(),self.pic.height())
-        self.conn = sqlite3.connect("database2.db")
-        print("connect database2 successfully")
+        self.conn = sqlite3.connect("database.db")
+        print("connect database successfully")
         self.cur = self.conn.cursor()
         self.pic.setPixmap(img)
         self.name.setText(result)
         self.iLike.clicked.connect(self.ILike)
         self.briefIntro.setText(str(self.ShowInfo()))
         self.back.clicked.connect(self.BackToSelect)
+        # 左侧：推荐信息
+        #######################################################
+        self.reCommendList = CarRecommendSpider.main(str(result))  # 12辆车
+        print(self.reCommendList)
+        carNum = len(self.reCommendList)  # 推荐车的数量
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10,40,400,115*carNum))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(10,40,400,115*carNum))
+        self.scrollAreaWidgetContents_2.setMinimumSize(QtCore.QSize(0, 115*carNum))
+        self.addRecommendCars()
+        self.ShowDataPic()
 
     def ShowInfo(self):
         # 数据库操作
@@ -127,6 +140,29 @@ class ResultWin(QWidget,Ui_Recognizing2):
         self.hide()
         m.show()
         return
+
+    def addRecommendCars(self):
+        for item in self.reCommendList: #循环每个推荐车辆
+            self.car = Ui_LeftSingleBlock(item)
+            self.verticalLayout.addWidget(self.car)
+            self.verticalLayout.addStretch(1)
+        return
+
+    def ShowDataPic(self):
+        sql = '''
+                    SELECT * from CAR_BRAND where cname = \"{ename}\"
+                '''.format(ename=result)  # 从数据库查询检测到的品牌
+
+        print("查询品牌信息...")
+        self.cur.execute(sql)
+        self.brandInfo = self.cur.fetchone()  # 一行
+        print("查询成功...")  # 得到tuple
+        url = self.brandInfo[2]
+        req = requests.get(url)
+        logo = QtGui.QPixmap()
+        logo.loadFromData(req.content)
+        logo = logo.scaled(QtCore.QSize(self.origin.width(),self.origin.height()))
+        self.origin.setPixmap(logo)
 
 cars = ['Alfa Romeo', 'Audi', 'BMW', 'Chevrolet', 'Citroen', 'Dacia', 'Daewoo', 'Dodge',
         'Ferrari', 'Fiat', 'Ford', 'Honda', 'Hyundai', 'Jaguar', 'Jeep', 'Kia', 'Lada',
