@@ -49,10 +49,14 @@ from Ui_LeftSingleBlock import Ui_LeftSingleBlock #组合部件：左侧每辆�
 import CarRecommendSpider  # 爬取当前品牌推荐车辆信息
 import requests
 from index_ui import Ui_index
+import globalvar as gl
 
+gl._init()  # 初始化全局变量管理模块
+gl.set_value('username', "")  # 设置变量值 username
 
 OpenFilePath = " "
 result = " "
+username = " "
 def common(cn, sql):
     """将数据从sql格式转换成列表镶嵌字典的格式并返回"""
     cursor = cn.execute(sql)
@@ -121,6 +125,7 @@ class FormSignIn(QMainWindow, Ui_login):
                 if reply == QMessageBox.Ok:
                     self.hide()
                     self.mywindow = FormIndex()
+                    gl.set_value('username', account)  # 设置变量值 user
                     self.mywindow.account = account
                     self.mywindow.show()
             else:
@@ -181,27 +186,30 @@ class ResultWin(QWidget,Ui_Recognizing2):
         self.pic.setPixmap(img)
         self.name.setText(result)
         self.iLike.clicked.connect(self.ILike)
-        self.briefIntro.setText(str(self.ShowInfo()))
+        self.textBrowser.setText(str(self.ShowInfo()))
         self.back.clicked.connect(self.BackToSelect)
         # 左侧：推荐信息
         #######################################################
         self.reCommendList = CarRecommendSpider.main(str(result))  # 12辆车
         print(self.reCommendList)
         carNum = len(self.reCommendList)  # 推荐车的数量
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10,40,400,115*carNum))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10,10,500,115*carNum))
         self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(10,40,400,115*carNum))
-        self.scrollAreaWidgetContents_2.setMinimumSize(QtCore.QSize(0, 115*carNum))
+        self.scrollAreaWidgetContents_2.setMinimumSize(QtCore.QSize(500, 115*carNum))
         self.addRecommendCars()
         self.ShowDataPic()
+        self.getPersonalInfo()
 
     def ShowInfo(self):
         # 数据库操作
-        self.cur.execute("SELECT * FROM CAR_BRAND WHERE cname = \"{carname}\"".format(carname=result))
+        print(str(result))
+        self.cur.execute("SELECT * FROM CAR_BRAND WHERE cname = \"{carname}\"".format(carname=str(result)))
         info = self.cur.fetchone()
         print(info[3])
         return info[3]
 
     def ILike(self):
+        global username
         #创建品牌——用户表
         sql = '''
              CREATE TABLE IF NOT EXISTS ILIKE
@@ -213,19 +221,32 @@ class ResultWin(QWidget,Ui_Recognizing2):
         print("create successfully")
         self.cur.execute(sql)
         self.conn.commit()
+        #
         #添加喜欢信息，并判断是否曾经存在过
         sql2 = '''
               INSERT INTO ILIKE 
               (brand,userName) values(\"{brand}\",\"{userName}\")
-        '''.format(brand = result,userName = "noname")
+        '''.format(brand = result,userName = username)
         sql3 = '''
              SELECT * FROM ILIKE WHERE userName = \"{userName}\" 
-        '''.format(userName = "noname")
+        '''.format(userName = username)
         self.cur.execute(sql3)
-        info = self.cur.fetchone()
-        if info != None and str(info[0])==result:
-            print("Already exists")
-            self.likeShow.setText("Already liked!")
+        info = self.cur.fetchall()
+        #print(info[0])
+        if info != None:
+            i = len(info)
+            j = 0
+            while j <= (i - 1):
+                if info[j][0] == result:
+                    print("Already exists")
+                    self.likeShow.setText("Already liked!")
+                    self.conn.commit()
+                    return
+                j += 1
+            self.likeShow.setText("Like it!")
+            self.cur.execute(sql2)
+            self.conn.commit()
+            print("successfully insert")
             return
         else:
             self.likeShow.setText("Like it!")
@@ -250,7 +271,6 @@ class ResultWin(QWidget,Ui_Recognizing2):
         sql = '''
                     SELECT * from CAR_BRAND where cname = \"{ename}\"
                 '''.format(ename=result)  # 从数据库查询检测到的品牌
-
         print("查询品牌信息...")
         self.cur.execute(sql)
         self.brandInfo = self.cur.fetchone()  # 一行
@@ -262,9 +282,33 @@ class ResultWin(QWidget,Ui_Recognizing2):
         logo = logo.scaled(QtCore.QSize(self.origin.width(),self.origin.height()))
         self.origin.setPixmap(logo)
 
-cars = ['Alfa Romeo', 'Audi', 'BMW', 'Chevrolet', 'Citroen', 'Dacia', 'Daewoo', 'Dodge',
+    def getPersonalInfo(self):
+        """得到当前登录用户的用户名"""
+        global username
+        username = gl.get_value('username')
+        '''
+        """在数据库中，查找登录用户的信息"""
+        db = QSqlDatabase.addDatabase("QSQLITE")
+        db.setDatabaseName('database.db')
+        db.open()
+
+        query = QSqlQuery()
+        sql = "SELECT * FROM user WHERE name='%s'" % username
+        query.exec_(sql)
+
+        if not query.exec_():
+            query.lastError()
+        else:
+            while query.next():
+                passwd = query.value(2)
+                registerTime = query.value(3)
+                gl.set_value('passwd', passwd)
+                gl.set_value('registerTime', registerTime)
+        '''
+
+cars = ['AlfaRomeo', 'Audi', 'BMW', 'Chevrolet', 'Citroen', 'Dacia', 'Daewoo', 'Dodge',
         'Ferrari', 'Fiat', 'Ford', 'Honda', 'Hyundai', 'Jaguar', 'Jeep', 'Kia', 'Lada',
-        'Lancia', 'Land Rover', 'Lexus', 'Maserati', 'Mazda', 'Mercedes', 'Mitsubishi',
+        'Lancia', 'LandRover', 'Lexus', 'Maserati', 'Mazda', 'Mercedes', 'Mitsubishi',
         'Nissan', 'Opel', 'Peugeot', 'Porsche', 'Renault', 'Rover', 'Saab', 'Seat',
         'Skoda', 'Subaru', 'Suzuki', 'Tata', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo']
 
