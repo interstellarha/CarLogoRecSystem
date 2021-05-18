@@ -74,8 +74,8 @@ class ResultWin(QWidget,Ui_Recognizing2):
         self.setupUi(self)
         global OpenFilePath
         img = QPixmap(OpenFilePath).scaled(self.pic.width(),self.pic.height())
-        self.conn = sqlite3.connect("database2.db")
-        print("connect database2 successfully")
+        self.conn = sqlite3.connect("database.db")
+        print("connect database successfully")
         self.cur = self.conn.cursor()
         self.pic.setPixmap(img)
         self.name.setText(result)
