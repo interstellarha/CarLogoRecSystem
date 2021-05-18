@@ -1,0 +1,124 @@
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+import time
+from PyQt5.QtSql import *
+
+import globalvar as gl
+
+
+class modifyPasswordPage(QDialog):
+    def __init__(self, parent=None):
+        super(modifyPasswordPage, self).__init__(parent)
+        self.setWindowTitle("修改密码")
+        self.setUpUI()
+
+    def setUpUI(self):
+        self.resize(500, 400)
+        self.layout = QFormLayout()
+        self.setLayout(self.layout)
+
+        self.oldPasswordLabel = QLabel("旧 密 码：")
+        self.passwordLabel = QLabel("新 密 码：")
+        self.confirmPasswordLabel = QLabel("确认密码：")
+
+
+        self.oldPasswordEdit = QLineEdit()
+        self.passwordEdit = QLineEdit()
+        self.confirmPasswordEdit = QLineEdit()
+
+        self.changePasswordButton = QPushButton("确认修改")
+        self.changePasswordButton.setFixedWidth(140)
+        self.changePasswordButton.setFixedHeight(32)
+
+
+        self.layout.addRow(self.oldPasswordLabel, self.oldPasswordEdit)
+        self.layout.addRow(self.passwordLabel, self.passwordEdit)
+        self.layout.addRow(self.confirmPasswordLabel, self.confirmPasswordEdit)
+        self.layout.addRow("", self.changePasswordButton)
+
+        font = QFont()
+        font.setPixelSize(20)
+        font.setPixelSize(16)
+
+        self.oldPasswordLabel.setFont(font)
+        self.passwordLabel.setFont(font)
+        self.confirmPasswordLabel.setFont(font)
+
+        font.setPixelSize(16)
+        self.changePasswordButton.setFont(font)
+        # self.studentNameEdit.setFont(font)
+        font.setPixelSize(12)
+        self.oldPasswordEdit.setFont(font)
+        self.passwordEdit.setFont(font)
+        self.confirmPasswordEdit.setFont(font)
+
+        self.layout.setVerticalSpacing(10)
+
+        # 设置长度
+        self.oldPasswordEdit.setMaxLength(16)
+        self.passwordEdit.setMaxLength(16)
+        self.confirmPasswordEdit.setMaxLength(16)
+        # 设置密码掩膜
+        self.oldPasswordEdit.setEchoMode(QLineEdit.Password)
+        self.passwordEdit.setEchoMode(QLineEdit.Password)
+        self.confirmPasswordEdit.setEchoMode(QLineEdit.Password)
+
+        # 设置校验
+        reg = QRegExp("PB[0~9]{8}")
+        pValidator = QRegExpValidator(self)
+        pValidator.setRegExp(reg)
+
+        reg = QRegExp("[a-zA-z0-9]+$")
+        pValidator.setRegExp(reg)
+        self.oldPasswordEdit.setValidator(pValidator)
+        self.passwordEdit.setValidator(pValidator)
+        self.confirmPasswordEdit.setValidator(pValidator)
+
+        # 设置信号与槽
+        self.changePasswordButton.clicked.connect(self.changePasswordButtonClicked)
+
+    def changePasswordButtonClicked(self):
+        oldPassword = self.oldPasswordEdit.text()
+        password = self.passwordEdit.text()
+        confirmPassword = self.confirmPasswordEdit.text()
+
+        username = gl.get_value('username')
+
+        if (oldPassword == "" or password == "" or confirmPassword == ""):
+            print(QMessageBox.warning(self, "警告", "输入不可为空，请重新输入", QMessageBox.Yes, QMessageBox.Yes))
+            return
+        db = QSqlDatabase.addDatabase("QSQLITE")
+        db.setDatabaseName('database.db')
+        db.open()
+        query = QSqlQuery()
+
+        # 如果密码错误
+        sql = "SELECT * FROM user WHERE pwd='%s' AND name='%s'" % (oldPassword, username)
+        query.exec_(sql)
+        if (not query.next()):
+            print(QMessageBox.warning(self, "警告", "原密码输入错误,请重新输入", QMessageBox.Yes, QMessageBox.Yes))
+            self.oldPasswordEdit.clear()
+            return
+        # 密码与确认密码不同
+        if(password!=confirmPassword):
+            print(QMessageBox.warning(self, "警告", "两次输入密码不同,请确认输入", QMessageBox.Yes, QMessageBox.Yes))
+            self.passwordEdit.clear()
+            self.confirmPasswordEdit.clear()
+            return
+        # 修改密码
+        sql = "UPDATE user SET pwd='%s' WHERE name='%s'" % (password, username)
+        query.exec_(sql)
+        db.commit()
+        QMessageBox.information(self, "提醒", "修改密码成功，请登录系统!", QMessageBox.Yes, QMessageBox.Yes)
+        self.close()
+        return
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon("./images/MainWindow_1.png"))
+    mainMindow = modifyPasswordPage()
+    mainMindow.show()
+    sys.exit(app.exec_())
