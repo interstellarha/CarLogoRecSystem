@@ -27,7 +27,7 @@ class Ui_Recognizing(object):
         self.recognize.setStyleSheet("background-color: rgb(170, 255, 255);")
         self.recognize.setObjectName("recognize")
         self.select = QtWidgets.QPushButton(self.frame)
-        self.select.setGeometry(QtCore.QRect(290, 330, 75, 23))
+        self.select.setGeometry(QtCore.QRect(290, 370, 75, 23))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(20)
         sizePolicy.setVerticalStretch(0)
@@ -37,7 +37,7 @@ class Ui_Recognizing(object):
         self.select.setStyleSheet("background-color: rgb(170, 255, 255);")
         self.select.setObjectName("select")
         self.label = QtWidgets.QLabel(self.frame)
-        self.label.setGeometry(QtCore.QRect(143, 60, 371, 231))
+        self.label.setGeometry(QtCore.QRect(143, 60, 371, 281))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(250)
         sizePolicy.setVerticalStretch(200)
@@ -45,7 +45,8 @@ class Ui_Recognizing(object):
         self.label.setSizePolicy(sizePolicy)
         self.label.setMinimumSize(QtCore.QSize(250, 200))
         self.label.setAutoFillBackground(False)
-        self.label.setStyleSheet("background-color: rgb(0, 0, 0);")
+        self.label.setStyleSheet("background-color: rgb(0, 0, 0);\n"
+"border-bottom-color: rgb(46, 126, 135);")
         self.label.setFrameShape(QtWidgets.QFrame.Box)
         self.label.setFrameShadow(QtWidgets.QFrame.Plain)
         self.label.setText("")
@@ -62,13 +63,19 @@ class Ui_Recognizing(object):
         self.return_2.setObjectName("return_2")
         self.time = QtWidgets.QLabel(self.frame)
         self.time.setGeometry(QtCore.QRect(13, 60, 115, 78))
-        self.time.setStyleSheet("background-color: rgb(46, 126, 135);")
+        self.time.setStyleSheet("background-color: rgb(46, 126, 135);\n"
+"font: 16pt \"Arial\";\n"
+"color: rgb(255, 255, 255);")
         self.time.setText("")
+        self.time.setAlignment(QtCore.Qt.AlignCenter)
         self.time.setObjectName("time")
         self.date = QtWidgets.QLabel(self.frame)
         self.date.setGeometry(QtCore.QRect(17, 148, 91, 16))
-        self.date.setStyleSheet("background-color: rgb(14, 179, 180);")
+        self.date.setStyleSheet("background-color: rgb(46, 126, 135);\n"
+"color: rgb(255, 255, 255);\n"
+"font: 75 10pt \"Arial\";")
         self.date.setText("")
+        self.date.setAlignment(QtCore.Qt.AlignCenter)
         self.date.setObjectName("date")
 
         self.retranslateUi(Recognizing)
