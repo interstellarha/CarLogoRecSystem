@@ -34,7 +34,7 @@ from keras.models import Sequential
 from keras.layers import Activation, Dense, Dropout, Flatten
 from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.constraints import maxnorm
-from keras.optimizers import adam, RMSprop, SGD
+from keras.optimizers import Adam, RMSprop, SGD
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras.utils import np_utils
 from keras.regularizers import l2
@@ -50,6 +50,7 @@ import CarRecommendSpider  # 爬取当前品牌推荐车辆信息
 import requests
 from index_ui import Ui_index
 import globalvar as gl
+from search import Ui_MainWindow
 
 gl._init()  # 初始化全局变量管理模块
 gl.set_value('username', "")  # 设置变量值 username
@@ -208,6 +209,7 @@ class ResultWin(QWidget,Ui_Recognizing2):
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(10,10,522,115*carNum))
         self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(10,40,522,115*carNum))
         self.scrollAreaWidgetContents_2.setMinimumSize(QtCore.QSize(522, 115*carNum))
+        
         self.addRecommendCars()
         self.ShowDataPic()
         self.getPersonalInfo()
@@ -389,10 +391,24 @@ class FormIndex(QWidget, Ui_index):
         super(FormIndex, self).__init__(parent)
         self.setupUi(self)
         self.logoRecognition.clicked.connect(self.EnterRecog)
+        self.carLogo.clicked.connect(self.carLogoClicked)
 
     def EnterRecog(self):
         self.hide()
         SelectWindow.show()
+
+    def carLogoClicked(self):
+        self.hide()
+        self.MainWindow = QMainWindow()
+        self.test = Ui_MainWindow()
+        self.test.setupUi(self.MainWindow)
+        self.test.backToHome.clicked.connect(self.comeBack)
+        self.MainWindow.show()
+    
+    def comeBack(self):
+        self.MainWindow.hide()
+        self.show()
+
 
 if __name__ == "__main__":
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
