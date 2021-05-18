@@ -5,21 +5,24 @@
 # @Project: HWprogram
 import sys
 
-from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget
 
 from index_ui import Ui_index
 from PyQt5.QtGui import *
-from login import SelectWindow
+from search import Ui_MainWindow
 
 class FormIndex(QWidget, Ui_index):
     def __init__(self, parent=None):
         super(FormIndex, self).__init__(parent)
         self.setupUi(self)
-        self.logoRecognition.clicked.connect(self.EnterRecog)
+        self.carLogo.clicked.connect(self.carLogoClicked)
 
-    def EnterRecog(self):
+    def carLogoClicked(self):
         self.hide()
-        SelectWindow.show()
+        self.MainWindow = QMainWindow()
+        self.test = Ui_MainWindow()
+        self.test.setupUi(self.MainWindow)
+        self.MainWindow.show()
 
 
 if __name__ == '__main__':
