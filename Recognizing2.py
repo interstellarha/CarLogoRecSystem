@@ -65,6 +65,11 @@ class Ui_Recognizing2(object):
         self.textBrowser.setGeometry(QtCore.QRect(580, 130, 201, 301))
         self.textBrowser.setObjectName("textBrowser")
 
+        self.message = QtWidgets.QLabel(Recognizing2)
+        self.message.setGeometry(QtCore.QRect(130, 90, 200, 200))
+        self.message.setStyleSheet("font: 20pt \"Arial Rounded MT Bold\";")
+        self.message.setObjectName("label")
+
         self.retranslateUi(Recognizing2)
         QtCore.QMetaObject.connectSlotsByName(Recognizing2)
 
@@ -73,3 +78,5 @@ class Ui_Recognizing2(object):
         Recognizing2.setWindowTitle(_translate("Recognizing2", "Recognizing2"))
         self.iLike.setText(_translate("Recognizing2", "ILIKE"))
         self.back.setText(_translate("Recognizing2", "<"))
+        self.message.setText(_translate("Form", "暂无推荐信息"))  # 英文名
+

@@ -98,7 +98,7 @@ class Ui_BrandIntro(object):
         self.scroll = QScrollArea(Form)
         self.scroll.setWidget(self.verticalLayoutWidget)
         self.scroll.setGeometry(QtCore.QRect(10, 10, 580, 600))
-    
+
         self.addRecommendCars()
 
         self.retranslateUi(Form)

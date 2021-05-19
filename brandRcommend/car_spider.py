@@ -103,13 +103,11 @@ def get_one_brand(brand_name):
     if brand_name in brand_dic.keys():
         url = baseurl + str(brand_dic[brand_name]) + '.html'
         listtest = askURL(url)
-        print(listtest)
     else:
         listtest = []
-        print(listtest)
+
     return listtest
 
-get_one_brand('1')
 # def main():
 #
 #     将所有信息保存到字典dict中，品牌名：品牌信息（二维列表：包括12个车辆信息）
