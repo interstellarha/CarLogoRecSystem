@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Time: 2021/5/14 21:20
-# @Author: 车诗琪
+# @Author: 车诗琪+其他文件整合
 # @File: login
 # @Project: HWprogram
 import sys
@@ -52,6 +52,7 @@ from index_ui import Ui_index
 import globalvar as gl
 from search import Ui_MainWindow
 from CarRecommendSpider import *
+# import LefBlockImg_src
 
 gl._init()  # 初始化全局变量管理模块
 gl.set_value('username', "")  # 设置变量值 username
@@ -205,7 +206,7 @@ class ResultWin(QWidget,Ui_Recognizing2):
         # 左侧：推荐信息
         #######################################################
         self.reCommendList = CarRecommendSpider.get_one_brand(str(result))  # 12辆车
-        print(self.reCommendList)
+        #print(self.reCommendList)
         carNum = len(self.reCommendList)  # 推荐车的数量
         if(len(self.reCommendList)==0):
             print("no recommendation")
@@ -213,25 +214,22 @@ class ResultWin(QWidget,Ui_Recognizing2):
             # self.label = QLabel("暂无推荐信息")
             # self.label.setAlignment(Qt.AlignRight)
             # self.label.setStyleSheet("color:rgb(20,20,20,255);font-size:16px;font-weight:bold:text")
-
-
         else:
             self.message.hide()
-            self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 500, 115 * carNum))
-            self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(10, 40, 400, 115 * carNum))
-            self.scrollAreaWidgetContents_2.setMinimumSize(QtCore.QSize(500, 115 * carNum))
-
-
+            self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 500, 104.5 * carNum))
+            # self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(10, 40, 500, 115 * carNum))
+            # self.scrollAreaWidgetContents_2.setMinimumSize(QtCore.QSize(500, 115 * carNum))
             self.addRecommendCars()
+
         self.ShowDataPic()
         self.getPersonalInfo()
 
     def ShowInfo(self):
         # 数据库操作
-        print(str(result))
+        # print(str(result))
         self.cur.execute("SELECT * FROM CAR_BRAND WHERE cname = \"{carname}\"".format(carname=str(result)))
         info = self.cur.fetchone()
-        print(info[3])
+        # print(info[3])
         return info[3]
 
     def ILike(self):
@@ -285,13 +283,25 @@ class ResultWin(QWidget,Ui_Recognizing2):
         self.hide()
         SelectWindow.show()
         return
-
+    
+    #查询结果：左侧循环出现每辆车
     def addRecommendCars(self):
         for item in self.reCommendList: #循环每个推荐车辆
             self.car = Ui_LeftSingleBlock(item)
             self.verticalLayout.addWidget(self.car)
             self.verticalLayout.addStretch(1)
-        return
+            # #背景
+            # self.backImg = QtWidgets.QLabel()
+            # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+            # sizePolicy.setHorizontalStretch(0)
+            # sizePolicy.setVerticalStretch(0)
+            # # sizePolicy.setHeightForWidth(self.backImg().hasHeightForWidth())
+            # self.backImg.setSizePolicy(sizePolicy)
+            # self.backImg.setStyleSheet("border-image: url(:/backSrc/images/leftBlockBackground.jpg);")
+            # self.backImg.setText("")
+            # self.backImg.setObjectName("backImg")
+            # self.verticalLayout2.addWidget(self.backImg)
+            # self.verticalLayout2.addStretch(1)
 
     def ShowDataPic(self):
         sql = '''
