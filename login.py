@@ -293,18 +293,6 @@ class ResultWin(QWidget,Ui_Recognizing2):
             self.car = Ui_LeftSingleBlock(item)
             self.verticalLayout.addWidget(self.car)
             self.verticalLayout.addStretch(1)
-            # #背景
-            # self.backImg = QtWidgets.QLabel()
-            # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-            # sizePolicy.setHorizontalStretch(0)
-            # sizePolicy.setVerticalStretch(0)
-            # # sizePolicy.setHeightForWidth(self.backImg().hasHeightForWidth())
-            # self.backImg.setSizePolicy(sizePolicy)
-            # self.backImg.setStyleSheet("border-image: url(:/backSrc/images/leftBlockBackground.jpg);")
-            # self.backImg.setText("")
-            # self.backImg.setObjectName("backImg")
-            # self.verticalLayout2.addWidget(self.backImg)
-            # self.verticalLayout2.addStretch(1)
 
     def ShowDataPic(self):
         sql = '''
