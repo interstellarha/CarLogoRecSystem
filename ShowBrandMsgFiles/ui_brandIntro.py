@@ -20,7 +20,7 @@ from Ui_LeftSingleBlock import Ui_LeftSingleBlock #组合部件：左侧每辆�
 
 class Ui_BrandIntro(object):
     # 信息初始化(收集信息)，传入品牌英文名（识别结果）
-    def __init__(self, brandEname):  
+    def __init__(self, brandEname):
         # 右侧：品牌信息
         #######################################################
         print("连接数据库...")
@@ -44,9 +44,10 @@ class Ui_BrandIntro(object):
 
 
     #参数Form(父窗口)的控件初始化
-    def setupUi(self, Form): 
-        Form.setObjectName("Form")
+    def setupUi(self, Form):
         Form.resize(981, 646) #原父窗口大小调整
+        Form.setObjectName('Form')
+        Form.setStyleSheet("#MainWindow{border-image:url(../pyqtpic/recommend.jpg);}")
 
         self.carLogo = QtWidgets.QLabel(Form)
         self.carLogo.setGeometry(QtCore.QRect(612, 93, 111, 101))
@@ -100,11 +101,10 @@ class Ui_BrandIntro(object):
         self.scroll.setGeometry(QtCore.QRect(10, 10, 580, 600))
 
         self.addRecommendCars()
-
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
-    def addRecommendCars(self): 
+    def addRecommendCars(self):
         for item in self.reCommendList: #循环每个推荐车辆
             self.car = Ui_LeftSingleBlock(item)
             self.vboxCars.addWidget(self.car)
@@ -142,6 +142,10 @@ class Ui_BrandIntro(object):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QMainWindow()
+
+    # MainWindow.setObjectName("MainWindow")
+    # MainWindow.setStyleSheet("#MainWindow{border-image:url(../pyqtpic/recommend.jpg);}")
+
 
     # showBrandIntro = Ui_BrandIntro(result) #传入识别结果，一下均为测试
 

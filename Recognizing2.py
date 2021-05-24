@@ -15,6 +15,18 @@ class Ui_Recognizing2(object):
     def setupUi(self, Recognizing2):
         Recognizing2.setObjectName("Recognizing2")
         Recognizing2.resize(790, 441)
+        # Recognizing2.setStyleSheet("#frame{border-image: url(:/pyqtpic/recommend.jpg);}")
+        # self.frame = QtWidgets.QFrame(Recognizing2)
+        # self.frame.setGeometry(QtCore.QRect(0, 0, 780, 441))
+        # self.frame.setStyleSheet("")
+        # self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        # self.frame.setFrameShadow(QtWidgets.QFrame.Plain)
+        # self.frame.setObjectName("frame")
+        self.recommendback = QtWidgets.QLabel(Recognizing2)
+        self.recommendback.setGeometry(QtCore.QRect(0, 0, 790, 441))
+        self.recommendback.setStyleSheet("border-image: url(./pyqtpic/recommend.jpg);")
+        self.recommendback.setText("")
+        self.recommendback.setObjectName("recommendbackground")
         self.name = QtWidgets.QLabel(Recognizing2)
         self.name.setGeometry(QtCore.QRect(640, 10, 131, 41))
         self.name.setStyleSheet("background-color: rgb(255, 255, 189);\n"
@@ -44,9 +56,11 @@ class Ui_Recognizing2(object):
         #self.scrollAreaWidgetContents_2.setMinimumSize(QtCore.QSize(0, 3000))
         # self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.verticalLayoutWidget = QtWidgets.QWidget(Recognizing2)
+
         #self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 160, 80))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
 

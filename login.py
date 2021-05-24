@@ -181,8 +181,8 @@ class SelectWin(QWidget, Ui_Recognizing):
         print(result)
         # 关闭当前窗口打开新窗口
         self.hide()
-        self.newWindow = ResultWin()
-        self.newWindow.show()
+        self.newwindow = ResultWin()
+        self.newwindow.show()
         return result
 
     def ReturnToIndex(self):
@@ -192,6 +192,9 @@ class SelectWin(QWidget, Ui_Recognizing):
 class ResultWin(QWidget,Ui_Recognizing2):
     def __init__(self):
         super(ResultWin,self).__init__()
+        # win = QMainWindow()
+        # win.setObjectName('window1')
+        # win.setStyleSheet("#Recognizing2{border-image:url(./pyqtpic/recommend.jpg);}")
         self.setupUi(self)
         global OpenFilePath,result
         img = QPixmap(OpenFilePath).scaled(self.pic.width(),self.pic.height())
