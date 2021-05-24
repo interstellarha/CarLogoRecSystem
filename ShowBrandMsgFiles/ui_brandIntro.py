@@ -87,11 +87,21 @@ class Ui_BrandIntro(object):
         self.cname.setGeometry(QtCore.QRect(810, 147, 81, 18))
         self.cname.setObjectName("cname")
 
-        self.verticalLayoutWidget = QtWidgets.QWidget(Form)  #左侧一整列
         carNum = len(self.reCommendList) #推荐车的数量
+
+        self.verticalLayoutWidget = QtWidgets.QWidget(Form)  #左侧一整列
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 550, 115*carNum)) #按数量决定下滑长度
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.vboxCars = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        
+        # self.vboxCars = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        # self.vboxCars.setContentsMargins(0, 0, 0, 0)
+        # self.vboxCars.setObjectName("verticalLayout")
+        
+        #不用QVBoxLayout试试：不行，QWidget只能setlayout，widgetCars放全部推荐+背景
+        self.widgetCars = QtWidgets.QWidget(self.verticalLayoutWidget)
+        self.widgetCars.setGeometry(QtCore.QRect(10, 10, 550, 115*carNum)) #按数量决定下滑长度
+        self.widgetCars.setObjectName("QWidget")
+        self.vboxCars = QtWidgets.QVBoxLayout(self.widgetCars)
         self.vboxCars.setContentsMargins(0, 0, 0, 0)
         self.vboxCars.setObjectName("verticalLayout")
 
@@ -99,16 +109,46 @@ class Ui_BrandIntro(object):
         self.scroll.setWidget(self.verticalLayoutWidget)
         self.scroll.setGeometry(QtCore.QRect(10, 10, 580, 600))
 
+        # #新加滚动条放背景：失败
+        # self.verticalLayoutWidget2 = QtWidgets.QWidget(Form)  #左侧一整列
+        # self.verticalLayoutWidget2.setGeometry(QtCore.QRect(10, 10, 550, 115*carNum)) #按数量决定下滑长度
+        # self.verticalLayoutWidget2.setObjectName("verticalLayoutWidget2")
+        # self.vboxBack = QtWidgets.QVBoxLayout(self.verticalLayoutWidget2)
+        # self.vboxBack.setContentsMargins(0, 0, 0, 0)
+        # self.vboxBack.setObjectName("verticalLayout")
+
         self.addRecommendCars()
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def addRecommendCars(self): 
+        i = 0
         for item in self.reCommendList: #循环每个推荐车辆
             self.car = Ui_LeftSingleBlock(item)
-            self.vboxCars.addWidget(self.car)
+            # 失败
+            # self.car.setStyleSheet("background-image: url(:/backSrc/images/leftBlockBackground.jpg);")
+            self.vboxCars.addWidget(self.car) #单个推荐放进vbox
             self.vboxCars.addStretch(1)
+
+            # self.backImg = QtWidgets.QLabel(self.widgetCars)
+            # self.backImg.setStyleSheet("border-image: url(:/backSrc/images/leftBlockBackground.jpg);")
+            # self.backImg.move(10,115*i)
+            # i = i+1
+
+            # self.vboxCars.addStretch(1)
+            # self.backImg = QtWidgets.QLabel("happy") #测试在下一行加：成功
+            # self.backImg.move(0,0)
+            # self.vboxCars.addWidget(self.backImg)
+            # self.vboxCars.addStretch(1)
+
+            # #新加滚动条放背景：失败
+            # self.backImg = QtWidgets.QLabel(self.)
+            # self.backImg.setStyleSheet("border-image: url(:/backSrc/images/leftBlockBackground.jpg);")
+            # self.backImg.setText("")
+            # self.backImg.setObjectName("background")
+            # self.vboxBack.addWidget(self.backImg)
+            # self.vboxBack.addStretch(1)
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
