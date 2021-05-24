@@ -46,8 +46,25 @@ class Ui_LeftSingleBlock(QtWidgets.QWidget):
         self.widget = QtWidgets.QWidget(self.verticalLayoutWidget)
         self.widget.setObjectName("widget")
 
+        # # 新增layout放背景图，测试能否自由缩放——失败，一个widget只能有一个layout
+        # # 新增verticalLayoutWidget_2也不行：不可缩放
+        # self.verticalLayoutWidget_2 = QtWidgets.QWidget(self.widget)
+        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        # sizePolicy.setHorizontalStretch(0)
+        # sizePolicy.setVerticalStretch(0)
+        # sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
+        # self.verticalLayoutWidget_2.setSizePolicy(sizePolicy)
+        # self.verticalLayoutWidget_2.setObjectName("verticalLayoutWidget_2")
+
+        # self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_2)
+        # self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
+        # self.verticalLayout_5.setObjectName("verticalLayout_5")
+        # self.background = QtWidgets.QLabel()
+        # self.verticalLayout_5.addWidget(self.background) #增
+
+
         self.background = QtWidgets.QLabel(self.widget)
-        self.background.setGeometry(QtCore.QRect(0, 0, 535, 121))
+        self.background.setGeometry(QtCore.QRect(0, 0, 535, 121)) #需据不同电脑修改
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -172,7 +189,7 @@ class Ui_LeftSingleBlock(QtWidgets.QWidget):
         self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
         self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_3.setObjectName("line_3")
-        
+
         self.verticalLayout_2.addWidget(self.line_3)
         self.verticalLayout_4.addWidget(self.widget)
 
