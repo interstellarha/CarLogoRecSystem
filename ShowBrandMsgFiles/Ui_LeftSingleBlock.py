@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# author：77SWF
 
 # Form implementation generated from reading ui file 'LeftSingleBlock.ui'
 #
@@ -12,6 +11,7 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 import requests
+import src #图片资源
 
 
 class Ui_LeftSingleBlock(QtWidgets.QWidget):
@@ -23,30 +23,41 @@ class Ui_LeftSingleBlock(QtWidgets.QWidget):
         self.oneCarList = oneCarList
         self.setupUi()
 
-    def setupUi(self): 
-    #def setupUi(self, LeftSingleBlock):
+    def setupUi(self):
         # LeftSingleBlock.setObjectName("LeftSingleBlock")
-        # LeftSingleBlock.resize(884, 611)
-
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(LeftSingleBlock.sizePolicy().hasHeightForWidth())
-        # LeftSingleBlock.setSizePolicy(sizePolicy)
-
-        #  = QtWidgets.QWidget(LeftSingleBlock)
-        # .setGeometry(QtCore.QRect(120, 200, 611, 141))
-        # .setObjectName("widget")
-
+        # LeftSingleBlock.resize(1000, 500)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
         self.setSizePolicy(sizePolicy)
-        # self.setMinimumSize(QtCore.QSize(500, 130))
-        # self.setMaximumSize(QtCore.QSize(500, 130))
+        # LeftSingleBlock.setMinimumSize(QtCore.QSize(1000, 500))
+        # LeftSingleBlock.setMaximumSize(QtCore.QSize(1000, 16777215))
+        # LeftSingleBlock.setStyleSheet("")
 
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayoutWidget = QtWidgets.QWidget()
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(150, 230, 541, 121))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+
+        self.widget = QtWidgets.QWidget(self.verticalLayoutWidget)
+        self.widget.setObjectName("widget")
+
+        self.background = QtWidgets.QLabel(self.widget)
+        self.background.setGeometry(QtCore.QRect(0, 0, 535, 121))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.background.sizePolicy().hasHeightForWidth())
+        self.background.setSizePolicy(sizePolicy)
+        self.background.setStyleSheet("border-image: url(:/backSrc/images/leftBlockBackground.jpg);")
+        self.background.setText("")
+        self.background.setObjectName("background")
+        
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.widget)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
 
@@ -60,17 +71,17 @@ class Ui_LeftSingleBlock(QtWidgets.QWidget):
         sizePolicy.setHeightForWidth(self.carImg.sizePolicy().hasHeightForWidth())
         self.carImg.setSizePolicy(sizePolicy)
         self.carImg.setObjectName("carImg")
-
         self.horizontalLayout_3.addWidget(self.carImg)
 
         self.line = QtWidgets.QFrame()
         self.line.setFrameShape(QtWidgets.QFrame.VLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
-
         self.horizontalLayout_3.addWidget(self.line)
+
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
+
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
 
@@ -81,8 +92,8 @@ class Ui_LeftSingleBlock(QtWidgets.QWidget):
         sizePolicy.setHeightForWidth(self.carName.sizePolicy().hasHeightForWidth())
         self.carName.setSizePolicy(sizePolicy)
         self.carName.setObjectName("carName")
-
         self.horizontalLayout.addWidget(self.carName)
+
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
 
@@ -93,38 +104,40 @@ class Ui_LeftSingleBlock(QtWidgets.QWidget):
         sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
         self.label.setSizePolicy(sizePolicy)
         self.label.setObjectName("label")
-
         self.horizontalLayout.addWidget(self.label)
+
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setObjectName("verticalLayout_3")
+
         spacerItem1 = QtWidgets.QSpacerItem(20, 5, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
         self.verticalLayout_3.addItem(spacerItem1)
-
+        
+        self.scoreBar = QtWidgets.QProgressBar()
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        self.scoreBar = QtWidgets.QProgressBar()
         sizePolicy.setHeightForWidth(self.scoreBar.sizePolicy().hasHeightForWidth())
-        
         self.scoreBar.setSizePolicy(sizePolicy)
+        self.scoreBar.setMinimumSize(QtCore.QSize(100, 20))
+        self.scoreBar.setMaximumSize(QtCore.QSize(100, 20))
         self.scoreBar.setMaximum(100)
         self.scoreBar.setProperty("value", 51)
         self.scoreBar.setTextVisible(True)
         self.scoreBar.setOrientation(QtCore.Qt.Horizontal)
         self.scoreBar.setInvertedAppearance(False)
         self.scoreBar.setObjectName("scoreBar")
-        self.scoreBar.setMinimumSize(QtCore.QSize(100, 20))
-        self.scoreBar.setMaximumSize(QtCore.QSize(100, 20))
-
         self.verticalLayout_3.addWidget(self.scoreBar)
+
         spacerItem2 = QtWidgets.QSpacerItem(20, 5, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
         self.verticalLayout_3.addItem(spacerItem2)
+
         self.horizontalLayout.addLayout(self.verticalLayout_3)
         self.verticalLayout.addLayout(self.horizontalLayout)
+
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setSizeConstraint(QtWidgets.QLayout.SetNoConstraint)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        
+
         self.levelLabel = QtWidgets.QLabel()
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -132,46 +145,44 @@ class Ui_LeftSingleBlock(QtWidgets.QWidget):
         sizePolicy.setHeightForWidth(self.levelLabel.sizePolicy().hasHeightForWidth())
         self.levelLabel.setSizePolicy(sizePolicy)
         self.levelLabel.setObjectName("levelLabel")
-
         self.horizontalLayout_2.addWidget(self.levelLabel)
-        
+
         self.level = QtWidgets.QLabel()
         self.level.setObjectName("level")
         self.horizontalLayout_2.addWidget(self.level)
-
         self.engineLabel = QtWidgets.QLabel()
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.engineLabel.sizePolicy().hasHeightForWidth())
+
         self.engineLabel.setSizePolicy(sizePolicy)
         self.engineLabel.setObjectName("engineLabel")
-
         self.horizontalLayout_2.addWidget(self.engineLabel)
 
         self.engine = QtWidgets.QLabel()
         self.engine.setObjectName("engine")
         self.horizontalLayout_2.addWidget(self.engine)
+
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_3.addLayout(self.verticalLayout)
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
-        
+
         self.line_3 = QtWidgets.QFrame()
         self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
         self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_3.setObjectName("line_3")
+        
         self.verticalLayout_2.addWidget(self.line_3)
+        self.verticalLayout_4.addWidget(self.widget)
 
         self.retranslateUi()
+        
+        self.setLayout(self.verticalLayout_4)
 
-        self.setLayout(self.verticalLayout_2)
-        #self.setGeometry(300, 300, 500, 210)
-    #     QtCore.QMetaObject.connectSlotsByName(LeftSingleBlock)
+        # QtCore.QMetaObject.connectSlotsByName(LeftSingleBlock)
 
     def retranslateUi(self):
-    # def retranslateUi(self, LeftSingleBlock):
-    #     _translate = QtCore.QCoreApplication.translate
-    #     LeftSingleBlock.setWindowTitle(_translate("LeftSingleBlock", "LeftSingleBlock"))
         self.carImg.setText("TextLabel")
         self.carName.setText("TextLabel")
         self.label.setText("用户评分：")
@@ -205,11 +216,13 @@ class Ui_LeftSingleBlock(QtWidgets.QWidget):
         self.level.setText(self.oneCarList[3]) #级别
         self.engine.setText(self.oneCarList[4]) #引擎
 
+# 仅为测试
 def main():
     app = QtWidgets.QApplication(sys.argv)
     ex = Ui_LeftSingleBlock(['奥迪A3', 'http://car3.autoimg.cn/cardfs/product/g30/M02/25/C0/120x90_0_q95_autohomecar__ChsEoF-pNuOAZzDzACTok2HOnoI585.jpg', '4.56', '紧凑型车', '1.4T'])
     ex.show()
     sys.exit(app.exec_())
 
+# 仅为测试
 if __name__ == '__main__':
     main()
