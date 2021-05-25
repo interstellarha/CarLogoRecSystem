@@ -12,7 +12,7 @@ gl._init()
 class Ui_MainWindow(object):
     def __init__(self):
         self.userName = gl.get_value('username')
-        print(self.userName)
+        # print(self.userName)
         self.database = sqlite3.connect('database.db')
         self.c = self.database.cursor()
         self.c.execute("CREATE TABLE IF NOT EXISTS COMMENT (userName text not null, cname varchar not null, comment text not null)")
@@ -26,12 +26,12 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         # 提示信息
         self.msg = QtWidgets.QLabel(self.centralwidget)
-        self.msg.setGeometry(QtCore.QRect(150, 30, 400, 50))
+        self.msg.setGeometry(QtCore.QRect(150, 150, 400, 50))
         self.msg.hide()
         # 返回home页面
         self.backToHome = QtWidgets.QPushButton(self.centralwidget)
-        self.backToHome.setGeometry(QtCore.QRect(100, 53, 50, 50))
-        self.backToHome.setStyleSheet("border-image: url(./images/home2.PNG);border:2px;border-radius:10px;padding:2px 4px;")
+        self.backToHome.setGeometry(QtCore.QRect(50, 53, 50, 50))
+        self.backToHome.setStyleSheet("border-image: url(./images/home.png);border:2px;border-radius:5px;padding:2px 4px;")
         # 数据库
         self.database = sqlite3.connect('database.db')
         self.c = self.database.cursor()
@@ -101,10 +101,10 @@ class Ui_MainWindow(object):
         self.comment.setGeometry(QtCore.QRect(413, 120, 360, 33))
         self.comment.setObjectName("comment")
         self.comment.setPlaceholderText("Say Something~")
-        self.comment.setStyleSheet("border:2px solid black")
+        self.comment.setStyleSheet("border:1px black")
 
         self.commectAction = QAction(self.comment)
-        self.commectAction.setIcon(QtGui.QIcon("images/comment.PNG"))
+        self.commectAction.setIcon(QtGui.QIcon("images/comment.jpg"))
         self.commectAction.triggered.connect(self.commentAdd)
         self.comment.addAction(self.commectAction,QtWidgets.QLineEdit.TrailingPosition)
         self.comment.hide()
@@ -160,8 +160,9 @@ class Ui_MainWindow(object):
     def search(self):
         text = self.lineEdit.text()
         if len(text) == 0:
-            self.msg.setText("Please Input a Brand")
-            self.msg.show()
+            reply = QMessageBox.warning(self.centralwidget, "Hint", "Please Input a Brand!", QMessageBox.Retry, QMessageBox.Retry)
+            if reply == QMessageBox.Retry:
+                self.lineEdit.clear()
         else:
             self.c.execute("SELECT * from CAR_BRAND where cname = \"{Cname}\" OR ename = \"{Cname}\"".format(Cname=text))
             result = self.c.fetchone()
@@ -183,14 +184,13 @@ class Ui_MainWindow(object):
                 brandmsg.setText(result[3])
                 brandmsg.setReadOnly(True)
 
-                followmsg = QtWidgets.QLabel("0")
-                followmsg.setStyleSheet("QLabel{font-size:25px;font-weight:normal;font-family:Roman times;}")
+                followmsg = QtWidgets.QLineEdit()
+                followmsg.setReadOnly(True)
+                followmsg.setStyleSheet("border:2px groove gray;border-radius:10px;padding:2px 4px")
+                followmsg.setAlignment(Qt.AlignCenter)
                 self.c.execute("SELECT * from ILIKE where brand = \"{Cname}\"".format(Cname=result[0]))
                 followResult = self.c.fetchall()
-                if followResult == None:
-                    followmsg.setText("0")
-                else:
-                    followmsg.setText(str(len(followResult)))
+                followmsg.setText(str(len(followResult)))
 
                 self.gridLayout.setSpacing(10)
                 self.gridLayout.addWidget(logo,1,1)
@@ -205,6 +205,7 @@ class Ui_MainWindow(object):
 
     # back动作绑定的函数：返回logo显示页面
     def back(self):
+        self.msg.hide()
         self.gridLayoutWidget.hide()
         self.comment.hide()
         self.commentText.hide()
@@ -220,7 +221,7 @@ class Ui_MainWindow(object):
             self.database.commit()
             self.commentShow()
         else:
-            self.msg.setText("Please input something!")
+            return
     
     def commentShow(self):
         self.c.execute("SELECT * from COMMENT where cname = \"{CNAME}\"".format(CNAME = self.brand))
@@ -229,9 +230,12 @@ class Ui_MainWindow(object):
         if commentResult != None:
             for i in range(len(commentResult)):
                 username = commentResult[i][0]
-                print(username)
+                # print(username)
                 userComment = commentResult[i][2]
+                self.commentText.moveCursor(QtGui.QTextCursor.End)
+                self.commentText.setTextColor(QtGui.QColor(70,130,180))
                 self.commentText.insertPlainText(username+"\n")
+                self.commentText.setTextColor(Qt.black)
                 self.commentText.insertPlainText(userComment+"\n")
 
     
@@ -240,6 +244,7 @@ class Ui_MainWindow(object):
         self.logolist.hide()
         CNAME = self.logoToBrand[row*4+column]
         print(CNAME)
+        self.brand = CNAME
         self.c.execute("SELECT * from CAR_BRAND where cname = \"{Cname}\"".format(Cname = CNAME))
         brandInfo = self.c.fetchone()
         logo = QtWidgets.QLabel()
@@ -252,14 +257,14 @@ class Ui_MainWindow(object):
         brandmsg.setText(brandInfo[3])
         brandmsg.setReadOnly(True)
         brandmsg.setStyleSheet("border:none")
-        followmsg = QtWidgets.QLabel("0")
-        followmsg.setStyleSheet("QLabel{font-size:25px;font-weight:normal;font-family:Roman times;}")
+
+        followmsg = QtWidgets.QLineEdit()
+        followmsg.setReadOnly(True)
+        followmsg.setStyleSheet("border:2px groove gray;border-radius:10px;padding:2px 4px")
+        followmsg.setAlignment(Qt.AlignCenter)
         self.c.execute("SELECT * from ILIKE where brand = \"{Cname}\"".format(Cname=brandInfo[0]))
         followResult = self.c.fetchall()
-        if followResult == None:
-            followmsg.setText("0")
-        else:
-            followmsg.setText(str(len(followResult)))
+        followmsg.setText(str(len(followResult)))
 
         self.gridLayout.setSpacing(10)
         self.gridLayout.addWidget(logo,1,1)
@@ -278,4 +283,3 @@ if __name__=='__main__':
     test.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-
