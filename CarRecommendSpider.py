@@ -22,7 +22,7 @@ def askURL(url):
     findEngine = re.compile(r'<span title=""><a href="(.*?)">(.*?)</a>', re.S)
     findLink = re.compile(r'<a class="font-bold" href="(.*?)" target="_blank">',re.S)
 
-    list = [[], [], [], [], [], [], [], [], [], [], [], []]  # 存储品牌车辆全部信息
+    list = []  # 存储品牌车辆全部信息
     data_ImgSrc = []
     data_Name = []
     data_Score = []
@@ -33,8 +33,9 @@ def askURL(url):
         bs = BeautifulSoup(html, "html.parser")
         number = 0
         for item in bs.find_all('div', class_="list-cont"):
-            if number >= 12:
-                break
+
+            list.append("item" + str(number))
+            list[number] = []
             item = str(item)
             ImgSrc0 = re.findall(findImgSrc, item)[0]
             ImgSrc = 'http:' + str(ImgSrc0)

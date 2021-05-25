@@ -16,7 +16,8 @@ def askURL(url):
     findEngine = re.compile(r'<span title=""><a href="(.*?)">(.*?)</a>', re.S)
     findLink = re.compile(r'<a class="font-bold" href="(.*?)" target="_blank">',re.S)
 
-    list = [[], [], [], [], [], [], [], [], [], [], [], []]  # 存储品牌车辆全部信息
+    list = []  # 存储品牌车辆全部信息
+
     data_ImgSrc = []
     data_Name = []
     data_Score = []
@@ -27,6 +28,12 @@ def askURL(url):
         bs = BeautifulSoup(html, "html.parser")
         number = 0
         for item in bs.find_all('div', class_="list-cont"):
+
+
+            list.append("item" + str(number))
+            list[number]=[]
+
+
             if number >= 12:
                 break
             item = str(item)
@@ -62,8 +69,17 @@ def askURL(url):
             list[number].append(Engine)
             list[number].append(Link)
 
+
+            # list[number].append(Name)
+            # list[number].append(ImgSrc)
+            # list[number].append(Score)
+            # list[number].append(Type)
+            # list[number].append(Engine)
+            # list[number].append(Link)
+
             data_ImgSrc.append(ImgSrc)
             data_Name.append(Name)
+            print(data_Name)
             data_Score.append(Score)
             data_Type.append(Type)
             number = number + 1
@@ -87,6 +103,7 @@ def askURL(url):
             print(e, "code")
         if hasattr(e, "reason"):
             print(e.reason)
+
     return list
 
 #根据输入数字返回品牌车辆查询结果
@@ -108,6 +125,9 @@ def get_one_brand(brand_name):
 
     return listtest
 
+
+
+print(get_one_brand('Maserati'))
 # def main():
 #
 #     将所有信息保存到字典dict中，品牌名：品牌信息（二维列表：包括12个车辆信息）

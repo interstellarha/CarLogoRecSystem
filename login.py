@@ -210,7 +210,16 @@ class ResultWin(QWidget,Ui_Recognizing2):
         #######################################################
         self.reCommendList = CarRecommendSpider.get_one_brand(str(result))  # 12辆车
         #print(self.reCommendList)
-        carNum = len(self.reCommendList)  # 推荐车的数量
+        carNum = 0
+        for i in self.reCommendList:
+            if len(i)==0:
+                break
+            else:
+                carNum=carNum+1
+        print(carNum+carNum+carNum)
+
+        # carNum = len(self.reCommendList)  # 推荐车的数量
+
         if(len(self.reCommendList)==0):
             print("no recommendation")
             self.scrollArea_2.hide()

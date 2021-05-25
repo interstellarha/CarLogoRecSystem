@@ -29,14 +29,16 @@ class Ui_Recognizing2(object):
         self.recommendback.setObjectName("recommendbackground")
         self.name = QtWidgets.QLabel(Recognizing2)
         self.name.setGeometry(QtCore.QRect(640, 10, 131, 41))
-        self.name.setStyleSheet("background-color: rgb(255, 255, 189);\n"
+        self.name.setStyleSheet("background-color: rgb(255, 255,255, 0);\n"
 "font: 14pt \"Arial\";")
         self.name.setText("")
         self.name.setAlignment(QtCore.Qt.AlignCenter)
         self.name.setObjectName("name")
         self.iLike = QtWidgets.QPushButton(Recognizing2)
         self.iLike.setGeometry(QtCore.QRect(670, 60, 75, 23))
-        self.iLike.setStyleSheet("background-color: rgb(255, 167, 255);")
+        self.iLike.setStyleSheet("border-image: url(./pyqtpic/cancel.png);\n"
+" rgb(255, 255,255, 0);\n"
+"}")
         self.iLike.setObjectName("iLike")
         self.back = QtWidgets.QPushButton(Recognizing2)
         self.back.setGeometry(QtCore.QRect(10, 10, 31, 23))
@@ -99,7 +101,7 @@ class Ui_Recognizing2(object):
     def retranslateUi(self, Recognizing2):
         _translate = QtCore.QCoreApplication.translate
         Recognizing2.setWindowTitle(_translate("Recognizing2", "Recognizing2"))
-        self.iLike.setText(_translate("Recognizing2", "ILIKE"))
+        self.iLike.setText(_translate("Recognizing2", "like"))
         self.back.setText(_translate("Recognizing2", "<"))
         self.message.setText(_translate("Form", "暂无推荐信息"))  # 英文名
 
