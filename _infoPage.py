@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-# @Time: 2021/5/16 21:50
-# @Author: 车诗琪
-# @File: infoPage
+# @Author: 童颖睿
 
 import sys
 import os
@@ -12,11 +9,11 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from PyQt5.QtSql import *
-from PIL import Image
 
 import globalvar as gl
 from _infoPage_ui import Ui_Info
 from _modifyPassword import modifyPasswordPage
+from _showFavoriteBrand import Ui_LikeBrands
 
 gl._init()  # 初始化全局变量管理模块
 OpenFilePath = " "
@@ -89,7 +86,7 @@ class personalInfoPage(QMainWindow, Ui_Info):
 
         # 绑定按钮事件
         self.changePortrait.clicked.connect(self.clickChangePortrait)
-        # self.favoriteBrand.clicked.connect(self.clickFavoriteBrand)
+        self.favoriteBrand.clicked.connect(self.clickFavoriteBrand)
         self.modifyPassword.clicked.connect(self.clickModifyPassword)
 
     def getPersonalInfo(self):
@@ -117,13 +114,6 @@ class personalInfoPage(QMainWindow, Ui_Info):
         # 从数据库中读出二进制图片，存入"D:\sqlite_create\username.jpg"
         readBlobData(username)
 
-        #保存头像图片路径
-        # imgPath = ".\\sqlite_create\\" + username + ".jpg"
-        # gl.set_value('imgPath', imgPath)
-
-        # jpg = QPixmap(imgPath).scaled(self.label_icon.width(), self.label_icon.height())
-        # self.label_icon.setPixmap(jpg)
-
     #点击 “更改头像” 按钮
     def clickChangePortrait(self):
         imgName, imgType = QFileDialog.getOpenFileName(self, "select", "img", "*.jpg;*.tif;*.png;;All Files(*)")
@@ -144,9 +134,9 @@ class personalInfoPage(QMainWindow, Ui_Info):
         updateBLOB(imgName, username)
 
     # 点击 “我喜欢的品牌” 按钮
-    # def clickFavoriteBrand(self):
-    #     self.mywindow = showFavoriteBrand()
-    #     self.mywindow.show()
+    def clickFavoriteBrand(self):
+        self.mywindow = Ui_LikeBrands()
+        self.mywindow.show()
 
     # 点击 “修改密码” 按钮
     def clickModifyPassword(self):
@@ -156,7 +146,7 @@ class personalInfoPage(QMainWindow, Ui_Info):
 
 
 if __name__ == '__main__':
-    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QMainWindow()
     test = personalInfoPage()
