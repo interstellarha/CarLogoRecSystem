@@ -72,4 +72,4 @@ class Ui_index(object):
 
     def retranslateUi(self, index):
         _translate = QtCore.QCoreApplication.translate
-        index.setWindowTitle(_translate("index", "Form"))
+        index.setWindowTitle(_translate("index", "车标识别系统-主页"))

@@ -154,7 +154,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "车标图鉴"))
 
     # 搜索动作绑定的函数
     def search(self):
@@ -243,7 +243,7 @@ class Ui_MainWindow(object):
     def logoClicked(self,row,column):
         self.logolist.hide()
         CNAME = self.logoToBrand[row*4+column]
-        print(CNAME)
+        # print(CNAME)
         self.brand = CNAME
         self.c.execute("SELECT * from CAR_BRAND where cname = \"{Cname}\"".format(Cname = CNAME))
         brandInfo = self.c.fetchone()

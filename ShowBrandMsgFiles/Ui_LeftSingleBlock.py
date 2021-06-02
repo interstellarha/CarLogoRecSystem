@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# author：苏婉芳
 
 # Form implementation generated from reading ui file 'LeftSingleBlock.ui'
 #

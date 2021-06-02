@@ -83,7 +83,7 @@ class Ui_Recognizing(object):
 
     def retranslateUi(self, Recognizing):
         _translate = QtCore.QCoreApplication.translate
-        Recognizing.setWindowTitle(_translate("Recognizing", "Recognizing"))
+        Recognizing.setWindowTitle(_translate("Recognizing", "车标识别"))
         self.recognize.setText(_translate("Recognizing", "Recognize"))
         self.select.setText(_translate("Recognizing", "Select"))
         self.return_2.setText(_translate("Recognizing", "<"))

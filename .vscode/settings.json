@@ -1,0 +1,4 @@
+{
+    "python.pythonPath": "C:\\Download\\python3_5\\python.exe",
+    "python.analysis.extraPaths":["ShowBrandMsgFiles"] //自定义包相对路径
+}

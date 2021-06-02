@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# author：77SWF
+# author：苏婉芳
 
 # Form implementation generated from reading ui file 'brandIntro.ui'
 #

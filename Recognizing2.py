@@ -102,7 +102,7 @@ class Ui_Recognizing2(object):
 
     def retranslateUi(self, Recognizing2):
         _translate = QtCore.QCoreApplication.translate
-        Recognizing2.setWindowTitle(_translate("Recognizing2", "Recognizing2"))
+        Recognizing2.setWindowTitle(_translate("Recognizing2", "识别结果"))
         self.iLike.setText(_translate("Recognizing2", ""))
         self.back.setText(_translate("Recognizing2", "<"))
         self.message.setText(_translate("Form", "暂无推荐信息"))  # 英文名

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# author：苏婉芳
 
 # Resource object code
 #

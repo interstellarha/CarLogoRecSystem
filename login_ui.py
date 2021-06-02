@@ -97,6 +97,6 @@ class Ui_login(object):
 
     def retranslateUi(self, login):
         _translate = QtCore.QCoreApplication.translate
-        login.setWindowTitle(_translate("login", "MainWindow"))
+        login.setWindowTitle(_translate("login", "车标识别系统"))
         self.label.setText(_translate("login", "还没有账号？"))
         self.register_2.setText(_translate("login", "点击注册"))

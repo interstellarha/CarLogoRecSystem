@@ -79,4 +79,4 @@ class Ui_regist(object):
 
     def retranslateUi(self, regist):
         _translate = QtCore.QCoreApplication.translate
-        regist.setWindowTitle(_translate("regist", "Form"))
+        regist.setWindowTitle(_translate("regist", "注册账号"))
