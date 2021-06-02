@@ -52,6 +52,7 @@ from index_ui import Ui_index
 import globalvar as gl
 from search import Ui_MainWindow
 from CarRecommendSpider import *
+from _infoPage import personalInfoPage
 # import LefBlockImg_src
 
 gl._init()  # 初始化全局变量管理模块
@@ -407,6 +408,7 @@ class FormIndex(QWidget, Ui_index):
         self.setupUi(self)
         self.logoRecognition.clicked.connect(self.EnterRecog)
         self.carLogo.clicked.connect(self.carLogoClicked)
+        self.home.clicked.connect(self.EnterHome)
 
     def EnterRecog(self):
         self.hide()
@@ -424,6 +426,9 @@ class FormIndex(QWidget, Ui_index):
         self.MainWindow.hide()
         self.show()
 
+    def EnterHome(self):
+        self.Home = personalInfoPage()
+        self.Home.show()
 
 if __name__ == "__main__":
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
