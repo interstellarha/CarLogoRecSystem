@@ -1,0 +1,16 @@
+author：苏婉芳
+学号：518021910150
+
+说明：
+由于本仓库的大文件lfs上传配额已满，故将打包后的exe文件（>100M）上传至交大云盘，请点击https://jbox.sjtu.edu.cn/l/EFKwOW下载至本项目文件夹根目录下，具体使用说明如下。
+
+1. 双击“login.exe”，等待30s左右即可使用该程序。
+
+2. 同目录下须有以下文件(夹)才可运行：
+│  car_CNN_13AUGM_CMCMCMCMF.h5py
+│  database.db
+├─carImg
+├─images
+├─pyqtpic
+├─sqlite_create
+└─t_images
